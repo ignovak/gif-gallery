@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import apiKey from "../../giphy_api_key.json";
+import loader from "./loader.svg";
+import "./Gallery.css";
 
 interface Gif {
   title: string;
@@ -31,24 +33,37 @@ function fetchGifs(query: string) {
 }
 
 export default function Gallery(props: { query: string }) {
-  const [state, setState] = useState({ gifs: [], error: null });
+  const [state, setState] = useState({ error: null, gifs: [], loading: false });
 
   useEffect(() => {
     if (props.query) {
+      setState({ error: null, gifs: [], loading: true });
       fetchGifs(props.query)
-        .then((gifs) => setState({ error: null, gifs }))
-        .catch((e) => setState({ error: e.message, gifs: [] }));
+        .then((gifs) => setState({ error: null, gifs, loading: false }))
+        .catch((e) => setState({ error: e.message, gifs: [], loading: false }));
     }
   }, [props.query]);
 
-  return <div>{getContent(state)}</div>;
+  return <div>{getContent(props.query, state)}</div>;
 }
 
-function getContent(state: { gifs: Gif[]; error: string | null }) {
+function getContent(
+  query: string,
+  state: { error: string | null; gifs: Gif[]; loading: boolean },
+) {
+  if (!query) {
+    return "Type something ^";
+  }
   if (state.error) {
     return `Error: ${state.error}`;
   }
-  return state.gifs.map((gif) => (
-    <img key={gif.url} src={gif.url} alt={gif.title} />
+  if (state.loading) {
+    return <img className="loader" src={loader} alt="Loader" />;
+  }
+  if (state.gifs.length === 0) {
+    return `No gifs found for query "${query}"`;
+  }
+  return state.gifs.map(({ title, url }) => (
+    <img key={url} src={url} alt={title} />
   ));
 }
