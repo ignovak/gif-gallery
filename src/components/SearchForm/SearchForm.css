@@ -1,0 +1,22 @@
+.search-form {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 10px;
+  margin: 20px auto;
+  box-sizing: border-box;
+}
+
+.form-input,
+.form-submit {
+  padding: 6px 12px;
+  font-size: 16px;
+  color: #495057;
+  border-radius: 4px;
+  outline: none;
+}
+
+.form-input {
+  border: 1px solid #ced4da;
+  flex: 1;
+}

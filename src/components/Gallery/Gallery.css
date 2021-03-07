@@ -15,11 +15,13 @@
 }
 
 .gallery {
+  max-width: 1200px;
   display: flex;
   flex-wrap: wrap;
 }
 
 .gallery-item {
+  flex: 1;
   min-width: 200px;
   max-width: 300px;
   max-height: 200px;
