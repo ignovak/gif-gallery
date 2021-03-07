@@ -24,13 +24,12 @@ function fetchGifs(query: string) {
     );
 }
 
-export default function Gallery() {
+export default function Gallery(props: { query: string }) {
   const [state, setState] = useState([]);
-  const query = "cats";
 
   useEffect(() => {
-    fetchGifs(query).then((gifs) => setState(gifs));
-  }, [query]);
+    fetchGifs(props.query).then((gifs) => setState(gifs));
+  }, [props.query]);
 
   return (
     <div>
