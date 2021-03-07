@@ -44,7 +44,7 @@ export default function Gallery(props: { query: string }) {
     }
   }, [props.query]);
 
-  return <div>{getContent(props.query, state)}</div>;
+  return <div className="gallery">{getContent(props.query, state)}</div>;
 }
 
 function getContent(
@@ -63,7 +63,13 @@ function getContent(
   if (state.gifs.length === 0) {
     return `No gifs found for query "${query}"`;
   }
-  return state.gifs.map(({ title, url }) => (
-    <img key={url} src={url} alt={title} />
+  return state.gifs.map(({ title, url }, i) => (
+    <div
+      className="gallery-item"
+      key={i}
+      style={{ backgroundImage: `url(${url})` }}
+    >
+      <img className="image" src={url} alt={title} title={title} />
+    </div>
   ));
 }

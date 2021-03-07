@@ -13,3 +13,25 @@
     transform: rotate(360deg);
   }
 }
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gallery-item {
+  min-width: 200px;
+  max-width: 300px;
+  max-height: 200px;
+  margin: 10px;
+  overflow: hidden;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.image {
+  min-width: 100%;
+  min-height: 100%;
+  opacity: 0;
+}
