@@ -11,8 +11,14 @@ function fetchGifs(query: string) {
     `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${query}&limit=10`,
   )
     .then((response) => response.json())
-    .then((result) =>
-      result.data.map(
+    .catch(() => {
+      throw new Error("Network error");
+    })
+    .then((result) => {
+      if (!result.data) {
+        throw new Error(result.message);
+      }
+      return result.data.map(
         (item: {
           images: { preview_gif: { url: string } };
           title: string;
@@ -20,22 +26,29 @@ function fetchGifs(query: string) {
           title: item.title,
           url: item.images.preview_gif.url,
         }),
-      ),
-    );
+      );
+    });
 }
 
 export default function Gallery(props: { query: string }) {
-  const [state, setState] = useState([]);
+  const [state, setState] = useState({ gifs: [], error: null });
 
   useEffect(() => {
-    fetchGifs(props.query).then((gifs) => setState(gifs));
+    if (props.query) {
+      fetchGifs(props.query)
+        .then((gifs) => setState({ error: null, gifs }))
+        .catch((e) => setState({ error: e.message, gifs: [] }));
+    }
   }, [props.query]);
 
-  return (
-    <div>
-      {state.map((gif: Gif, i) => (
-        <img key={i} src={gif.url} alt={gif.title} />
-      ))}
-    </div>
-  );
+  return <div>{getContent(state)}</div>;
+}
+
+function getContent(state: { gifs: Gif[]; error: string | null }) {
+  if (state.error) {
+    return `Error: ${state.error}`;
+  }
+  return state.gifs.map((gif) => (
+    <img key={gif.url} src={gif.url} alt={gif.title} />
+  ));
 }
