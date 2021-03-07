@@ -22,11 +22,11 @@ function fetchGifs(query: string) {
       }
       return result.data.map(
         (item: {
-          images: { preview_gif: { url: string } };
+          images: { original: { url: string }; preview_gif: { url: string } };
           title: string;
         }) => ({
           title: item.title,
-          url: item.images.preview_gif.url,
+          url: item.images.preview_gif.url || item.images.original.url,
         }),
       );
     });
